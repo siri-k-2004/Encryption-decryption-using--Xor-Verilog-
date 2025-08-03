@@ -1,0 +1,26 @@
+// EncryptorDecryptor_WithKey.v
+module EncryptorDecryptor_WithKey (
+    input clk,
+    input rst,
+    input [7:0] data_in,
+    input [7:0] key_in,
+    input load_key,     // 1 = load new key
+    input mode,         // 1 = Encrypt, 0 = Decrypt
+    output reg [7:0] data_out
+);
+
+    reg [7:0] key; // Internal key register
+
+    always @(posedge clk or posedge rst) begin
+        if (rst)
+            key <= 8'h00; // Reset key to 0
+        else if (load_key)
+            key <= key_in; // Load new key
+    end
+
+    always @(posedge clk) begin
+        data_out <= data_in ^ key; // XOR logic
+    end
+
+endmodule
+
